@@ -7,18 +7,7 @@
 int main()
 {   
     int file_descriptor01, fork_id, close_value;
-    file_descriptor01 = open("HW01Q6.txt", O_CREAT | O_TRUNC | O_WRONLY);
-    if (file_descriptor01 < 0)
-    {
-        std::cout << "error opening file"<< std::endl;
-        exit(1);
-    }
-    else
-    {
-        std::cout << "parent opened file with file descriptor: " << file_descriptor01 << std::endl;
-    }
     
-    std::cout << "calling fork..." << std::endl;
     
     fork_id = fork();
 
@@ -27,13 +16,15 @@ int main()
     if (fork_id == 0)
     {   
         std::cout <<"in child process\n";
-        close_value = close(STDOUT_FILENO);
+        fflush(stdout); //ensures any local file * buffer chars are written to actual file either console or redirected file. fflush goes through library
+        close_value = close(STDOUT_FILENO); //stdout byte stream opened by parent (usually shell) "deassociate this process file file handler #1". this close is lower level goes to operating system
         //close_value = close(file_descriptor01);
-        std::cout << "close value: " << close_value << std::endl;
+        int error = printf("hello \n"); //
+        fprintf(stderr, "Reached error: %d Close value: %d\n", error);
     }
     else
     {
-        std::cout << "parent id: " << fork_id << std::endl;
+        printf("hello from parent with id: %d\n", getpid()); //here, fork_id is id of child
         //write(file_descriptor01, "hello from parent\n", strlen("hello from parent\n"));
     }
 

@@ -7,7 +7,7 @@
 int main()
 {   
     int file_descriptor01, file_descriptor02, fork_id, parent_write, child_write;
-    file_descriptor01 = open("HW01Q2.txt", O_RDWR);
+    file_descriptor01 = open("HW01Q2.txt", O_CREAT | O_TRUNC | O_WRONLY, 0777);
     if (file_descriptor01 < 0)
     {
         std::cout << "error opening file from parent"<< std::endl;
